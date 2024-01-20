@@ -10,8 +10,13 @@ sudo apt install -y ufw
 # Create a custom configuration file for SSH
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 
-# Edit the custom configuration file
-sudo tee -a /etc/fail2ban/jail.local > /dev/null <<EOL
+# Path to the jail.local file
+jail_local_path="/etc/fail2ban/jail.local"
+
+# Check if [sshd] section already exists in jail.local
+if ! grep -q "\[sshd\]" "$jail_local_path"; then
+    # [sshd] section doesn't exist, add the entire section
+    sudo tee -a "$jail_local_path" > /dev/null <<EOL
 [sshd]
 enabled = true
 port = ssh
@@ -20,6 +25,10 @@ logpath = /var/log/auth.log
 maxretry = 2
 bantime = 86400
 EOL
+else
+    # [sshd] section already exists, add missing options
+    sudo sed -i '/\[sshd\]/,/^\[/ s/\(port = .*\)/\1\nmaxretry = 2\nbantime = 86400/' "$jail_local_path"
+fi
 
 # Add Fail2Ban UFW action
 sudo tee -a /etc/fail2ban/action.d/ufw.conf > /dev/null <<EOL
