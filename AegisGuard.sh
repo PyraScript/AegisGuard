@@ -7,13 +7,7 @@ sudo apt install -y fail2ban
 # Install UFW if not already installed
 sudo apt install -y ufw
 
-# Create a custom configuration file for SSH
-sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-
-# Remove the default [sshd] configuration from jail.local
-sudo sed -i '/\[sshd\]/,/^\[/d' /etc/fail2ban/jail.local
-
-# Add your custom configuration to jail.local
+# Edit the custom configuration file
 sudo tee -a /etc/fail2ban/jail.local > /dev/null <<EOL
 [sshd]
 enabled = true
