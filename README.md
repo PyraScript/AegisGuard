@@ -1,6 +1,5 @@
-```markdown
 # AegisGuard
-````
+
 AegisGuard is a set of scripts to enhance the security of your Linux system by configuring Fail2Ban with UFW for securing SSH.
 
 ## Installation
