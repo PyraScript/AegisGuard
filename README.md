@@ -7,7 +7,7 @@ AegisGuard is a set of scripts to enhance the security of your Linux system by c
 To install AegisGuard, run the following command:
 
 ```bash
-bash -c "$(wget -O- https://raw.githubusercontent.com/PyraScript/AegisGuard/blob/main/AegisGuard.sh)"
+bash -c "$(wget -O- https://raw.githubusercontent.com/PyraScript/AegisGuard/main/AegisGuard.sh)"
 ```
 
 ## Security Management
