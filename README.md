@@ -34,4 +34,3 @@ If you have suggestions or find issues, feel free to open an [issue](https://git
 - [UFW (Uncomplicated Firewall)](https://wiki.ubuntu.com/UncomplicatedFirewall)
 
 Happy securing your system with AegisGuard!
-```
