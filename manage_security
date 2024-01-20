@@ -1,0 +1,69 @@
+#!/bin/bash
+
+show_status() {
+    echo "Fail2Ban Status:"
+    sudo service fail2ban status
+
+    echo -e "\nUFW Status:"
+    sudo ufw status
+}
+
+show_blocked_ips() {
+    echo "Blocked IPs:"
+    sudo fail2ban-client status sshd | awk '/Banned IP list:/ {flag=1; next} /Banned:/ {flag=0} flag' | sed 's/Banned IP list://' | tr -d '[:space:]'
+}
+
+start_services() {
+    sudo service fail2ban start
+    sudo ufw --force enable
+    echo "Services started."
+}
+
+stop_services() {
+    sudo service fail2ban stop
+    sudo ufw disable
+    echo "Services stopped."
+}
+
+restart_services() {
+    sudo service fail2ban restart
+    sudo ufw --force enable
+    echo "Services restarted."
+}
+
+while true; do
+    echo -e "\n===== Security Management Menu ====="
+    echo "1. Show Status"
+    echo "2. Show Blocked IPs"
+    echo "3. Start Services"
+    echo "4. Stop Services"
+    echo "5. Restart Services"
+    echo "6. Exit"
+
+    read -p "Select an option (1-6): " choice
+
+    case "$choice" in
+        1)
+            show_status
+            ;;
+        2)
+            show_blocked_ips
+            ;;
+        3)
+            start_services
+            ;;
+        4)
+            stop_services
+            ;;
+        5)
+            restart_services
+            ;;
+        6)
+            echo "Exiting. Goodbye!"
+            exit 0
+            ;;
+        *)
+            echo "Invalid option. Please enter a number between 1 and 6."
+            ;;
+    esac
+done
