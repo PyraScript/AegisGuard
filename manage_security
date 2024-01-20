@@ -10,7 +10,7 @@ show_status() {
 
 show_blocked_ips() {
     echo "Blocked IPs:"
-    sudo fail2ban-client status sshd | awk '/Banned IP list:/ {flag=1; next} /Banned:/ {flag=0} flag' | sed 's/Banned IP list://' | tr -d '[:space:]'
+    sudo fail2ban-client status sshd 
 }
 
 start_services() {
