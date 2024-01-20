@@ -12,7 +12,7 @@ bash -c "$(wget -O- https://raw.githubusercontent.com/PyraScript/AegisGuard/main
 
 ## Security Management
 
-Once installed, you can use the `manage_security.sh` script to manage Fail2Ban and UFW. This script provides a user-friendly menu for various security-related actions.
+Once installed, you can use the `manage_security` script to manage Fail2Ban and UFW. This script provides a user-friendly menu for various security-related actions.
 
 To run the security management script, use:
 
