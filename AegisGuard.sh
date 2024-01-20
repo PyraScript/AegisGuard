@@ -47,5 +47,5 @@ echo "Fail2Ban installed and configured. IP banning after 2 failed SSH login att
 sudo wget -O /usr/local/bin/manage_security https://raw.githubusercontent.com/PyraScript/AegisGuard/main/manage_security
 sudo chmod +x /usr/local/bin/manage_security
 
-echo "manage_security.sh installed. You can now use 'manage_security' command to manage Fail2Ban and UFW."
+echo "manage_security installed. You can now use 'manage_security' command to manage Fail2Ban and UFW."
 
