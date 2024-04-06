@@ -31,6 +31,46 @@ restart_services() {
     echo "Services restarted."
 }
 
+change_ssh_port() {
+    read -p "Enter desired SSH port: " ssh_port
+    
+    # Allow the new SSH port in UFW
+    sudo ufw allow $ssh_port/tcp
+    
+    # Remove the previous SSH port from UFW, if any
+    previous_ssh_port=$(sudo grep -oP '(?<=Port\s)\d+' /etc/ssh/sshd_config | head -n 1)
+    if [ -n "$previous_ssh_port" ]; then
+        sudo ufw delete allow $previous_ssh_port/tcp
+    fi
+
+    # Change the SSH port in sshd_config
+    sudo sed -i "s/#Port.*$/Port $ssh_port/g" /etc/ssh/sshd_config
+    sudo systemctl restart sshd
+    echo "SSH port changed to $ssh_port"
+}
+
+change_dns_server() {
+    read -p "Enter desired DNS server: " dns_server
+    sudo sed -i "s/DNS=.*/DNS=$dns_server/g" /etc/systemd/resolved.conf
+    sudo systemctl restart systemd-resolved
+    echo "DNS server set to $dns_server"
+}
+
+enable_disable_ping() {
+    read -p "Enable or Disable Ping responses? (enable/disable): " ping_status
+    if [ "$ping_status" == "enable" ]; then
+        sudo systemctl start disable_ping.service
+        echo "Ping responses enabled."
+        echo "Server May Need to Reboot"
+    elif [ "$ping_status" == "disable" ]; then
+        sudo systemctl stop disable_ping.service
+        echo "Ping responses disabled."
+        echo "Server May Need to Reboot"
+    else
+        echo "Invalid option. Please enter 'enable' or 'disable'."
+    fi
+}
+
 while true; do
     echo -e "\n===== Security Management Menu ====="
     echo "1. Show Status"
@@ -38,9 +78,12 @@ while true; do
     echo "3. Start Services"
     echo "4. Stop Services"
     echo "5. Restart Services"
-    echo "6. Exit"
+    echo "6. Change SSH Port"
+    echo "7. Change DNS Server"
+    echo "8. Enable/Disable Ping Responses"
+    echo "00. Exit"
 
-    read -p "Select an option (1-6): " choice
+    read -p "Select an option: " choice
 
     case "$choice" in
         1)
@@ -59,11 +102,20 @@ while true; do
             restart_services
             ;;
         6)
+            change_ssh_port
+            ;;
+        7)
+            change_dns_server
+            ;;
+        8)
+            enable_disable_ping
+            ;;
+        00)
             echo "Exiting. Goodbye!"
             exit 0
             ;;
         *)
-            echo "Invalid option. Please enter a number between 1 and 6."
+            echo "Invalid option. Please enter a valid option."
             ;;
     esac
 done
