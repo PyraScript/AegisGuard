@@ -80,7 +80,7 @@ actionunban = ufw delete deny from <ip> to any
 EOL
 
 # Update UFW rules to allow SSH and enable UFW
-sudo ufw allow $ssh_port
+sudo ufw allow $ssh_port/tcp
 sudo ufw --force enable
 
 # Restart Fail2Ban
